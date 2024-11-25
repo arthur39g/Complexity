@@ -1,0 +1,187 @@
+import React, { useState } from 'react';
+import { MessageCircle, Repeat2, Heart, User, Home, Mail } from 'lucide-react';
+
+const TimelineItem = ({ author, handle, content, date = "2024", replies = Math.floor(Math.random() * 5000), retweets = Math.floor(Math.random() * 15000), likes = Math.floor(Math.random() * 25000) }) => (
+  <div className="border-b border-gray-200 p-4 hover:bg-gray-50">
+    <div className="flex items-start gap-3">
+      <div className="w-12 h-12 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center">
+        <User className="text-gray-400" size={24} />
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <span className="font-bold">{author}</span>
+          <span className="text-gray-500">@{handle || author.toLowerCase().replace(/\s+/g, '')}</span>
+          <span className="text-gray-500">· {date}</span>
+        </div>
+        <div className="mt-2 text-gray-900 whitespace-pre-wrap">{content}</div>
+        <div className="flex items-center gap-12 mt-3 text-gray-500">
+          <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer">
+            <MessageCircle size={18} />
+            <span>{(replies/1000).toFixed(1)}K</span>
+          </div>
+          <div className="flex items-center gap-2 hover:text-green-500 cursor-pointer">
+            <Repeat2 size={18} />
+            <span>{(retweets/1000).toFixed(1)}K</span>
+          </div>
+          <div className="flex items-center gap-2 hover:text-red-500 cursor-pointer">
+            <Heart size={18} />
+            <span>{(likes/1000).toFixed(1)}K</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const Message = ({ sender, content, time = "2h" }) => (
+  <div className="p-4 border-b border-gray-200 hover:bg-gray-50">
+    <div className="flex gap-3">
+      <div className="w-12 h-12 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center">
+        <User className="text-gray-400" size={24} />
+      </div>
+      <div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">{sender}</span>
+          <span className="text-gray-500">· {time}</span>
+        </div>
+        <p className="text-gray-900 mt-1">{content}</p>
+      </div>
+    </div>
+  </div>
+);
+
+const Sidebar = ({ activePage, setActivePage }) => (
+  <div className="fixed left-0 top-0 h-screen w-64 border-r border-gray-200 bg-white p-4">
+    <div className="space-y-4">
+      <button 
+        onClick={() => setActivePage('home')}
+        className={`flex items-center gap-4 p-3 rounded-full hover:bg-gray-100 w-full text-lg ${activePage === 'home' ? 'font-bold' : ''}`}
+      >
+        <Home size={24} />
+        Accueil
+      </button>
+      <button 
+        onClick={() => setActivePage('messages')}
+        className={`flex items-center gap-4 p-3 rounded-full hover:bg-gray-100 w-full text-lg ${activePage === 'messages' ? 'font-bold' : ''}`}
+      >
+        <Mail size={24} />
+        Messages
+      </button>
+    </div>
+  </div>
+);
+
+const MessagesPage = () => {
+  const messages = [
+    {
+      sender: "Yvon Chouinard",
+      content: "Notre dernière réunion sur l'entreprise libérée a été inspirante. Les équipes sont plus engagées que jamais dans notre mission environnementale. 🌿",
+      time: "1h"
+    },
+    {
+      sender: "Ricardo Semler",
+      content: "Ravi de voir que nos pratiques de management démocratique inspirent d'autres entreprises. La confiance est la clé. 🔑",
+      time: "3h"
+    },
+    {
+      sender: "Michel Aballea (Decathlon)",
+      content: "L'autonomie des équipes porte ses fruits. Nos collaborateurs innovent chaque jour dans leur façon de travailler. 💡",
+      time: "5h"
+    }
+  ];
+
+  return (
+    <div className="border-l border-r border-gray-200 min-h-screen">
+      <div className="sticky top-0 bg-white p-4 border-b border-gray-200">
+        <h1 className="text-xl font-bold">Messages</h1>
+      </div>
+      {messages.map((message, index) => (
+        <Message key={index} {...message} />
+      ))}
+    </div>
+  );
+};
+
+const Timeline = () => {
+  const [activePage, setActivePage] = useState('home');
+
+  const tweets = [
+    {
+      author: "Yvon Chouinard",
+      handle: "YvonChouinard",
+      content: "Chez Patagonia, nous transformons les défis écologiques en opportunités. Matériaux durables et programme '1% for the Planet' : agir pour la planète est notre priorité. 🌍💪 #Durabilité #Éthique"
+    },
+    {
+      author: "Clara Green",
+      handle: "ClaraGreenPata",
+      content: "Travailler chez Patagonia, c'est être acteur du changement : du NACL Friday au programme 'Don't Buy This Jacket', nos actions vont au-delà des mots. 🌱💼 #Empowerment"
+    },
+    {
+      author: "Patagonia",
+      handle: "patagonia",
+      content: "Notre mission : sauver notre planète. Réparer plutôt que racheter, investir dans des technologies vertes, et rester un modèle de durabilité. #ActNow 🌿"
+    },
+    {
+      author: "Frédéric De Clerck",
+      handle: "FredDeClerck",
+      content: "Chez Décathlon, réduire la hiérarchie à 4 niveaux et promouvoir l'autonomie sont essentiels pour réinventer le management. Parce que l'humain passe avant tout ! 💼👥 #ManagementLibéré"
+    },
+    {
+      author: "Julien Sportif",
+      handle: "JulienDeca",
+      content: "Changer de poste tous les 3 ans ou jouer au baby-foot ? Chez Décathlon, polyvalence et bien-être se rencontrent. 🏓✨ #TravailAutrement"
+    },
+    {
+      author: "Decathlon",
+      handle: "decathlon",
+      content: "Nos espaces de travail évoluent, mais une chose reste : remettre l'humain au centre. L'innovation managériale est notre boussole. 🧭💡 #FiersDeChanger"
+    },
+    {
+      author: "Ricardo Semler",
+      handle: "RicardoSemler",
+      content: "Pourquoi les règles inutiles ? Chez Semco, la confiance et la décentralisation nous rendent plus forts et adaptables. 🙌 #LeadershipDémocratique"
+    },
+    {
+      author: "Ana Silva",
+      handle: "AnaSilvaSemco",
+      content: "Flexibilité et transparence financière : deux piliers qui font de Semco un lieu où il fait bon travailler. 💼🔓 #SemcoWay"
+    },
+    {
+      author: "SEMCO",
+      handle: "SEMCOgroup",
+      content: "La démocratie en entreprise, c'est possible. Moins de bureaucratie, plus d'autonomie : c'est ainsi que nous innovons. 🌟📈 #InnovationManagériale"
+    }
+  ];
+
+  return (
+    <div className="flex min-h-screen bg-white">
+      <Sidebar activePage={activePage} setActivePage={setActivePage} />
+      <div className="ml-64 flex-1 max-w-2xl">
+        {activePage === 'home' ? (
+          <>
+            <div className="sticky top-0 bg-white p-4 border-b border-gray-200 z-10">
+              <h1 className="text-xl font-bold">Elon Musk's Hell</h1>
+            </div>
+            <div>
+              {tweets.map((tweet, index) => (
+                <TimelineItem key={index} {...tweet} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <MessagesPage />
+        )}
+      </div>
+      <div className="fixed left-[270px] top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-lg p-4 border border-gray-200">
+        <h3 className="font-bold text-sm mb-2">Développeurs</h3>
+        <ul className="text-sm text-gray-600">
+          <li>Jordan Grondin</li>
+          <li>Arthur Garnier</li>
+          <li>Léo Pierru</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default Timeline;
